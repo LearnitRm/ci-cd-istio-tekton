@@ -22,7 +22,7 @@ spec:
       privileged: true
     script: |
       echo Editing destination rule....
-      RULE_INDEX=$(yq r $(workspaces.source.path)/ci-cd-istio-tekton/manifests/destrule-$(params.SERVICE_NAME).yaml --length spec.subsets)
+      RULE_INDEX=$(yq r $(workspaces.source.path)/ci-cd-istio-tekton/manifests/destrule-$(params.SERVICE_NAME).yaml | jq '.spec.subsets | length)
       yq w -i $(workspaces.source.path)/ci-cd-istio-tekton/manifests/destrule-$(params.SERVICE_NAME).yaml "spec.subsets[+]" name:
       yq w -i $(workspaces.source.path)/ci-cd-istio-tekton/manifests/destrule-$(params.SERVICE_NAME).yaml spec.subsets[$RULE_INDEX].name $(params.SERVICE_VERSION)
       yq w -i $(workspaces.source.path)/ci-cd-istio-tekton/manifests/destrule-$(params.SERVICE_NAME).yaml spec.subsets[$RULE_INDEX].labels.version $(params.SERVICE_VERSION)
